@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
+    const navigate = useNavigate()
 
     async function login() {
         try {
@@ -11,14 +14,18 @@ export default function LoginPage() {
                 import.meta.env.VITE_API_URL + "/api/users/login",
                 { email, password }
             );
+
+            localStorage.setItem("token", response.data.token)
+            toast.success("Login Successful")
             const user = response.data.user;
             if (user.role == "admin") {
-                window.location.href = "/admin";
+                navigate("/admin");
             }else {
-                window.location.href = "/";
+                navigate("/");
             }
         } catch (e) {
             console.error("Login failed: ", e);
+            toast.error("Login failed. Please check your credentials")
         }
     }
 
