@@ -5,6 +5,7 @@ import { BsBox2Heart } from "react-icons/bs";
 import { HiOutlineUsers } from "react-icons/hi2";
 import AdminProductPage from "./admin/adminProductPage";
 import AddProductPage from "./admin/adminAddNewProduct";
+import UpdateProductPage from "./admin/adminUpdateProduct";
 
 export default function AdminPage() {
     return (
@@ -30,6 +31,7 @@ export default function AdminPage() {
                     <HiOutlineUsers className="text-xl" />
                     Users
                 </Link>
+
             </div>
             <div className="w-[calc(100%-300px)] h-full border-[3px] border-accent rounded-[20px] overflow-hidden">
                 <div className="h-full w-full max-w-full max-h-full overflow-y-scroll">
@@ -39,6 +41,7 @@ export default function AdminPage() {
                         <Route path="/products" element={<AdminProductPage/>} />
                         <Route path="/users" element={<h1>Users</h1>} />
                         <Route path="/add-product" element={<AddProductPage/>} />
+                        <Route path="/update-product" element={<UpdateProductPage/>} />
                     </Routes>
                 </div>
             </div>
