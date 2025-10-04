@@ -12,7 +12,7 @@ export default function UpdateProductPage() {
 	const [description, setDescription] = useState(location.state.description)
 	const [images, setImages] = useState([])
 	const [price, setPrice] = useState(location.state.price)
-	const [labelledPrice, setLabelledPrice] = useState(location.state.lablledPrice)
+	const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice)
 	const [category, setCategory] = useState(location.state.category)
 	const [stock, setStock] = useState(location.state.stock)
 	const navigate = useNavigate()
@@ -43,7 +43,7 @@ export default function UpdateProductPage() {
                 description: description,
                 images: urls,
                 price: price,
-                lablledPrice: labelledPrice,
+                labelledPrice: labelledPrice,
                 category: category,
                 stock: stock
             }

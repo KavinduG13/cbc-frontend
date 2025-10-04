@@ -139,7 +139,7 @@ export default function AdminProductPage() {
                                             </td>
 
                                             <td className="px-4 py-3 align-middle text-sm text-secondary/90">
-                                                {item.lablledPrice}
+                                                {item.labelledPrice}
                                             </td>
 
                                             <td className="px-4 py-3 text-secondary/70">
