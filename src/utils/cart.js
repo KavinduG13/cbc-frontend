@@ -19,9 +19,9 @@ export function addToCart(product, quantity) {
         }
     )
 
-    if(existingItemIndex == -1) { 
+    if (existingItemIndex == -1) {
         // item is not in the cart
-        if(quantity < 1) {
+        if (quantity < 1) {
             console.log("Quantity must be at least 1")
             return
         }
@@ -36,21 +36,33 @@ export function addToCart(product, quantity) {
         }
         cart.push(cartItem)
 
-    }else{
+    } else {
         // item is already in the cart
         const existingItem = cart[existingItemIndex]
         const newQuantity = existingItem.quantity + quantity
 
-        if(newQuantity < 1) {
+        if (newQuantity < 1) {
             cart = cart.filter(
                 (item) => {
                     return item.productID != product.productID
                 }
             )
-        }else{
+        } else {
             existingItem.quantity = newQuantity
         }
     }
 
     localStorage.setItem("cart", JSON.stringify(cart))  // array eka string ekakata convert karala localStorage eke store karanawa using JSON.stringify
+}
+
+export function getTotal() {
+    const cart = loadCart()
+    let total = 0
+
+    cart.forEach(
+        (item) => {
+            total += item.price * item.quantity
+        }
+    )
+    return total
 }
