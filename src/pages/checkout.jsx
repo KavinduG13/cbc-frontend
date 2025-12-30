@@ -1,11 +1,14 @@
 import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci"
 import { BiTrash } from "react-icons/bi"
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import axios from "axios"
+import toast from "react-hot-toast"
 
 export default function CheckoutPage() {
 
     const location = useLocation()
+    const navigate = useNavigate()
     const [cart, setCart] = useState(location.state)
 
     function getTotal() {
@@ -16,6 +19,45 @@ export default function CheckoutPage() {
             }
         )
         return total
+    }
+
+    async function purchaseCart() {
+        const token = localStorage.getItem("token")
+        if (token == null) {
+            toast.error("You must be logged in to make a purchase")
+            navigate("/login")
+            return;
+        }
+        try {
+            const items = []
+            for (let i=0; i<cart.length; i++) {
+                items.push(
+                    {
+                        productID: cart[i].productID,
+                        quantity: cart[i].quantity
+                    }
+                )
+            }
+            await axios.post(import.meta.env.VITE_API_URL + "/api/orders", {
+                address: "No 123, Sample Street, Sample City",
+                items: items
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+
+            toast.success("Order placed successfully")
+
+        } catch (error) {
+            toast.error("Failed to place order")
+            console.error(error)
+
+            // If the error is 400
+            if(error.response && error.response.status == 400) {
+                toast.error(error.response.data.message);
+            }
+        }
     }
 
     return (
@@ -69,7 +111,7 @@ export default function CheckoutPage() {
                     })
                 }
                 <div className="w-full h-[120px] bg-white flex justify-end items-center relative">
-                    <button to="/checkout" className="absolute left-0 bg-accent text-white font-semibold px-[20px] py-[10px] rounded-md hover:bg-accent/80 ml-[10px]">Order Now</button>
+                    <button to="/checkout" onClick={purchaseCart} className="absolute left-0 bg-accent text-white font-semibold px-[20px] py-[10px] rounded-md hover:bg-accent/80 ml-[10px]">Order Now</button>
                     <div className="h-[50px]">
                         <span className="font-semibold text-accent w-full text-right text-2xl pr-[10px] mt-[5px]">Total: LKR {getTotal().toFixed(2)}</span>
                     </div>
