@@ -30,16 +30,17 @@ export default function ProductOverview() {
         , [])
 
     return (
-        <div className="w-full h-[calc(100vh-100px)] text-secondary">
+        <div className="w-full lg:h-[calc(100vh-100px)] text-secondary bg-primary p-3">
             {
                 status == "Loading" && <Loader />
             }
             {
-                status == "Success" && (<div className="w-full h-full flex">
-                    <div className="w-[50%] h-full flex justify-center items-center">
+                status == "Success" && (<div className="w-full flex flex-col lg:flex-row p-10 lg:p-0">
+                    <h1 className="text-2xl font-bold text-center lg:hidden p-3">{product.name}</h1>
+                    <div className="w-full lg:w-[50%] h-full flex justify-center items-center">
                         <ImageSlider images={product.images} />
                     </div>
-                    <div className="w-[50%] h-full flex flex-col p-10 gap-4 items-center">
+                    <div className="w-full lg:w-[50%] h-full flex flex-col p-10 bg-primary gap-4 items-center">
                         <span className="">{product.productID}</span>
                         <h1 className="text-2xl font-bold text-center">{product.name}
                             {
@@ -78,7 +79,7 @@ export default function ProductOverview() {
                                 price: product.price,
                                 labelledPrice: product.labelledPrice,
                                 quantity: 1
-                            }]} className="w-full h-full text-center bg-secondary text-white font-semibold rounded hover:bg-secondary/90 transition"
+                            }]} className="w-full h-full flex justify-center items-center bg-secondary text-white font-semibold rounded hover:bg-secondary/90 transition"
                             >Buy Now</Link>
                         </div>
                     </div>

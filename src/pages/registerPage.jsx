@@ -1,48 +1,36 @@
-import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function LoginPage() {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+export default function RegisterPage() {
+    const [email, setEmail] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const navigate = useNavigate()
-    const googleLogin = useGoogleLogin({
-        onSuccess: (response) => {
-            axios.post(import.meta.env.VITE_API_URL + "/api/users/google-login", {
-                token: response.access_token
-            }).then((res) => {
-                localStorage.setItem("token", res.data.token)
-                const user = res.data.user;
-                toast.success("Login Successful")
-                if(user.role == "admin"){
-                    navigate("/admin");
-                }else{
-                    navigate("/");
-                }
-            }).catch((err) => {
-                console.error("Google login failed: ", err);
-                toast.error("Google login failed. Please try again.")
-            })
+
+    async function register() {
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
         }
-    });
 
-    async function login() {
         try {
-            const response = await axios.post(
-                import.meta.env.VITE_API_URL + "/api/users/login",
-                { email, password }
-            );
+            await axios.post(
+                import.meta.env.VITE_API_URL + "/api/users",
+                { 
+                    email: email, 
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
+                }
+            ); 
 
-            localStorage.setItem("token", response.data.token)
-            toast.success("Login Successful")
-            const user = response.data.user;
-            if (user.role == "admin") {
-                navigate("/admin");
-            } else {
-                navigate("/");
-            }
+            toast.success("Registration successful! You can now log in.");
+            navigate("/login");
+
         } catch (e) {
             console.error("Login failed: ", e);
             toast.error("Login failed. Please check your credentials")
@@ -51,32 +39,6 @@ export default function LoginPage() {
 
     return (
         <div className="w-full min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center flex">
-            {/* Left brand panel */}
-            <div className="hidden md:block w-1/2 relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-secondary)]/80 via-[color:var(--color-secondary)]/60 to-[color:var(--color-accent)]/50 backdrop-blur-[2px]" />
-                <div className="relative z-10 h-full w-full flex flex-col justify-between p-10">
-                    <img
-                        src="/logo.png"
-                        alt="CBC - Crystal Beauty Clear"
-                        className="w-40 drop-shadow-xl"
-                    />
-                    <div className="max-w-md">
-                        <h2 className="text-4xl font-bold text-white leading-tight drop-shadow">
-                            Welcome to{" "}
-                            <span className="text-[color:var(--color-accent)]">CBC</span>
-                        </h2>
-                        <p className="mt-4 text-base/relaxed text-white/80">
-                            Crystal Beauty Clear — premium cosmetics for every glow. Sign in
-                            to reorder your favorites, track deliveries, and unlock member
-                            offers.
-                        </p>
-                    </div>
-                    <div className="text-white/70 text-xs">
-                        © {new Date().getFullYear()} Crystal Beauty Clear
-                    </div>
-                </div>
-            </div>
-
             {/* Right auth panel */}
             <div className="w-full md:w-1/2 min-h-screen flex justify-center items-center p-6">
                 <div className="w-full max-w-md">
@@ -95,12 +57,9 @@ export default function LoginPage() {
                         {/* Card */}
                         <div className="relative backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 space-y-6">
                             <div className="space-y-1">
-                                <h1 className="text-2xl font-semibold text-white">
-                                    Sign in to shop your favorites
+                                <h1 className="text-2xl font-semibold text-white flex justify-center items-center">
+                                    Register Now
                                 </h1>
-                                <p className="text-sm text-white/70">
-                                    Easy checkout, order tracking, and exclusive perks.
-                                </p>
                             </div>
 
                             {/* Email */}
@@ -145,9 +104,52 @@ export default function LoginPage() {
                                         className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-[color:var(--color-secondary)] placeholder:text-[color:var(--color-secondary)]/50 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[color:var(--color-accent)] transition"
                                     />
                                 </div>
-                                <p id="email-hint" className="text-xs text-white/70">
-                                    We’ll only use this to sign you in and send order updates.
-                                </p>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label
+                                    htmlFor="firstName"
+                                    className="text-sm font-medium text-white/90"
+                                >
+                                    First Name
+                                </label>
+                                <div className="relative">
+                                    <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">                                    </span>
+                                    <input
+                                        id="firstName"
+                                        type="text"
+                                        autoComplete="given-name"
+                                        placeholder="e.g. John"
+                                        required
+                                        onChange={(e) => {
+                                            setFirstName(e.target.value);
+                                        }}
+                                        className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-[color:var(--color-secondary)] placeholder:text-[color:var(--color-secondary)]/50 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[color:var(--color-accent)] transition"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label
+                                    htmlFor="lastName"
+                                    className="text-sm font-medium text-white/90"
+                                >
+                                    Last Name
+                                </label>
+                                <div className="relative">
+                                    <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">                                    </span>
+                                    <input
+                                        id="lastName"
+                                        type="text"
+                                        autoComplete="family-name"
+                                        placeholder="e.g. Doe"
+                                        required
+                                        onChange={(e) => {
+                                            setLastName(e.target.value);
+                                        }}
+                                        className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-[color:var(--color-secondary)] placeholder:text-[color:var(--color-secondary)]/50 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[color:var(--color-accent)] transition"
+                                    />
+                                </div>
                             </div>
 
                             {/* Password */}
@@ -179,7 +181,7 @@ export default function LoginPage() {
                                         id="password"
                                         type="password"
                                         autoComplete="current-password"
-                                        placeholder="••••••••"
+                                        placeholder="Enter Your New Password"
                                         aria-describedby="password-hint"
                                         required
                                         enterKeyHint="go"
@@ -189,59 +191,69 @@ export default function LoginPage() {
                                         className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-[color:var(--color-secondary)] placeholder:text-[color:var(--color-secondary)]/50 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[color:var(--color-accent)] transition"
                                     />
                                 </div>
-                                <p id="password-hint" className="text-xs text-white/70">
-                                    Keep your account secure. Never share your password.
-                                </p>
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div className="space-y-2">
+                                <label
+                                    htmlFor="confirmPassword"
+                                    className="text-sm font-medium text-white/90"
+                                >
+                                    Confirm Password
+                                </label>
+                                <div className="relative">
+                                    <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center">
+                                        {/* Lock icon */}
+                                        <svg
+                                            className="h-5 w-5 text-white/60"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <rect x="4" y="11" width="16" height="9" rx="2" />
+                                            <path d="M8 11V7a4 4 0 1 1 8 0v4" />
+                                        </svg>
+                                    </span>
+                                    <input
+                                        id="confirmPassword"
+                                        type="password"
+                                        autoComplete="current-password"
+                                        placeholder="Confirm Your Password"
+                                        aria-describedby="password-hint"
+                                        required
+                                        enterKeyHint="go"
+                                        onChange={(e) => {
+                                            setConfirmPassword(e.target.value);
+                                        }}
+                                        className="w-full h-12 pl-11 pr-4 rounded-2xl bg-white/95 text-[color:var(--color-secondary)] placeholder:text-[color:var(--color-secondary)]/50 outline-none ring-1 ring-black/5 focus:ring-2 focus:ring-[color:var(--color-accent)] transition"
+                                    />
+                                </div>
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center justify-between text-sm">
-                                <a
-                                    href="#"
-                                    className="text-white/80 hover:text-white transition underline underline-offset-4"
-                                >
-                                    Forgot password?
-                                </a>
+                            <div className="flex items-center text-primary text-sm">
+                                Already have an account?  
                                 <Link
-                                    to="/register"
-                                    className="text-white/80 hover:text-white transition underline underline-offset-4"
+                                    to="/login"
+                                    className="text-accent hover:text-white transition underline underline-offset-4"
                                 >
-                                    Create account
+                                    Log in
                                 </Link>
                             </div>
 
                             {/* Button */}
                             <button
-                                onClick={login}
+                                onClick={register}
                                 aria-label="Login to your CBC account"
                                 className="group relative w-full h-12 rounded-2xl font-semibold tracking-wide text-[color:var(--color-secondary)] bg-[color:var(--color-accent)] hover:brightness-105 active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-[color:var(--color-accent)]/60"
                             >
                                 <span className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-[color:var(--color-primary)]/40 to-white/0" />
                                 <div className="flex items-center justify-center gap-2">
-                                    <span>Login</span>
-                                    <svg
-                                        className="h-5 w-5 transition -translate-x-0 group-hover:translate-x-0.5"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="1.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        aria-hidden="true"
-                                    >
-                                        <path d="M5 12h14" />
-                                        <path d="m12 5 7 7-7 7" />
-                                    </svg>
-                                </div>
-                            </button>
-                            <button
-                                onClick={googleLogin}
-                                aria-label="Login to your CBC account"
-                                className="group relative w-full h-12 rounded-2xl font-semibold tracking-wide text-[color:var(--color-secondary)] bg-[color:var(--color-accent)] hover:brightness-105 active:scale-[0.99] transition focus:outline-none focus:ring-2 focus:ring-[color:var(--color-accent)]/60"
-                            >
-                                <span className="absolute inset-0 -z-10 rounded-2xl bg-gradient-to-br from-[color:var(--color-primary)]/40 to-white/0" />
-                                <div className="flex items-center justify-center gap-2">
-                                    <span>Google Login</span>
+                                    <span>Register</span>
                                     <svg
                                         className="h-5 w-5 transition -translate-x-0 group-hover:translate-x-0.5"
                                         viewBox="0 0 24 24"
@@ -275,6 +287,31 @@ export default function LoginPage() {
 
                     {/* Decorative bottom bar */}
                     <div className="mt-6 h-1 w-32 rounded-full mx-auto bg-gradient-to-r from-[color:var(--color-accent)] via-white/70 to-[color:var(--color-primary)]/80" />
+                </div>
+            </div>
+            {/* Left brand panel */}
+            <div className="hidden md:block w-1/2 relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-[color:var(--color-secondary)]/80 via-[color:var(--color-secondary)]/60 to-[color:var(--color-accent)]/50 backdrop-blur-[2px]" />
+                <div className="relative z-10 h-full w-full flex flex-col justify-between p-10">
+                    <img
+                        src="/logo.png"
+                        alt="CBC - Crystal Beauty Clear"
+                        className="w-40 drop-shadow-xl"
+                    />
+                    <div className="max-w-md">
+                        <h2 className="text-4xl font-bold text-white leading-tight drop-shadow">
+                            Welcome to{" "}
+                            <span className="text-[color:var(--color-accent)]">CBC</span>
+                        </h2>
+                        <p className="mt-4 text-base/relaxed text-white/80">
+                            Crystal Beauty Clear — premium cosmetics for every glow. Sign up
+                            to reorder your favorites, track deliveries, and unlock member
+                            offers.
+                        </p>
+                    </div>
+                    <div className="text-white/70 text-xs">
+                        © {new Date().getFullYear()} Crystal Beauty Clear
+                    </div>
                 </div>
             </div>
         </div>

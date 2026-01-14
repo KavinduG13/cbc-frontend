@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { FaChartLine } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { BsBox2Heart } from "react-icons/bs";
@@ -7,8 +7,43 @@ import AdminProductPage from "./admin/adminProductPage";
 import AddProductPage from "./admin/adminAddNewProduct";
 import UpdateProductPage from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrdersPage";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Loader } from "../components/loader";
+import axios from "axios";
 
 export default function AdminPage() {
+
+    const navigate = useNavigate()
+    const [userLoaded, setUserLoaded] = useState(false)
+
+    useEffect(
+        () => {
+            const token = localStorage.getItem("token")
+            if(token == null) {
+                toast.error("You are not logged in")
+                navigate("/login")
+                return
+            }
+            axios.get(import.meta.env.VITE_API_URL + "/api/users/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((res) => {
+                if(res.data.role !== "admin") {
+                    toast.error("You are not authorized to access the admin panel")
+                    navigate("/")
+                    return;
+                }
+                setUserLoaded(true)
+            }).catch(() => {
+                toast.error("Session expired. Please login again")
+                localStorage.removeItem("token")
+                navigate("/login")
+            })
+        }, []
+    )
+
     return (
         <div className="w-full h-full bg-primary flex p-2 text-secondary">
             <div className="w-[300px] h-full bg-primary flex flex-col items-center gap-[20px]">
@@ -36,14 +71,14 @@ export default function AdminPage() {
             </div>
             <div className="w-[calc(100%-300px)] h-full border-[3px] border-accent rounded-[20px] overflow-hidden">
                 <div className="h-full w-full max-w-full max-h-full overflow-y-scroll">
-                    <Routes path="/">
+                    {userLoaded?<Routes path="/">
                         <Route path="/" element={<h1>Dashboard</h1>} />
                         <Route path="/orders" element={<AdminOrdersPage />} />
                         <Route path="/products" element={<AdminProductPage/>} />
                         <Route path="/users" element={<h1>Users</h1>} />
                         <Route path="/add-product" element={<AddProductPage/>} />
                         <Route path="/update-product" element={<UpdateProductPage/>} />
-                    </Routes>
+                    </Routes>:<Loader />}
                 </div>
             </div>
         </div>
