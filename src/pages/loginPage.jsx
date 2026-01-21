@@ -196,12 +196,12 @@ export default function LoginPage() {
 
                             {/* Actions */}
                             <div className="flex items-center justify-between text-sm">
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/forgot-password"
                                     className="text-white/80 hover:text-white transition underline underline-offset-4"
                                 >
                                     Forgot password?
-                                </a>
+                                </Link>
                                 <Link
                                     to="/register"
                                     className="text-white/80 hover:text-white transition underline underline-offset-4"
