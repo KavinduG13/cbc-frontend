@@ -9,7 +9,7 @@ export function ProductPage() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if(isLoading) {
+        if (isLoading) {
             axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
                 (response) => {
                     setProducts(response.data)
@@ -25,18 +25,34 @@ export function ProductPage() {
 
     return (
         <div className="w-full min-h-[calc(100vh-100px)] bg-primary">
+            <div className="w-full h-[100px] flex justify-center items-center">
+                <input type="text"
+                    onChange={async (e) => {
+                        try {
+                            if (e.target.value == "") {
+                                setIsLoading(true)
+                            } else {
+                                const searchResult = await axios.get(import.meta.env.VITE_API_URL + "/api/products/search/" + e.target.value)
+                                setProducts(searchResult.data)
+                            }
+                        } catch {
+                            toast.error("Search failed")
+                        }
+                    }}
+                    placeholder="Search for products..." className="w-[500px] px-4 py-2 rounded-lg border border-secondary/10 bg-primary" />
+            </div>
             {
                 isLoading ? <Loader />
-                : 
-                <div className="w-full h-full flex flex-row flex-wrap justify-center">
-                    {
-                        products.map((item) => {
-                            return(
-                                <ProductCard key = {item.productID} product = {item} />
-                            )
-                        })
-                    }
-                </div>
+                    :
+                    <div className="w-full h-full flex flex-row flex-wrap justify-center">
+                        {
+                            products.map((item) => {
+                                return (
+                                    <ProductCard key={item.productID} product={item} />
+                                )
+                            })
+                        }
+                    </div>
             }
         </div>
     )
