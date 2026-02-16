@@ -1,11 +1,14 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export default function UserData() {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [menuOpen, setMenuOpen] = useState(false)
     const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false)
 
+    const menuRef = useRef(null)
+    const btnRef = useRef(null)
 
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -29,26 +32,63 @@ export default function UserData() {
         }
     }, [])
 
+    // Close menu on outside click / ESC
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (
+                menuOpen &&
+                menuRef.current &&
+                !menuRef.current.contains(e.target) &&
+                btnRef.current &&
+                !btnRef.current.contains(e.target)
+            ) {
+                setMenuOpen(false)
+            }
+        }
+
+        function handleEsc(e) {
+            if (e.key === "Escape") setMenuOpen(false)
+        }
+
+        document.addEventListener("mousedown", handleClickOutside)
+        document.addEventListener("keydown", handleEsc)
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside)
+            document.removeEventListener("keydown", handleEsc)
+        }
+    }, [menuOpen])
+
     return (
         <div className="flex items-center justify-center mr-4">
-            {
-                isLogoutConfirmOpen && (
-                    <div className="fixed z-[120px] w-full h-screen top-0 left-0 bg-black/30">
-                        <div className="w-[300px] h-[150px] bg-primary rounded-lg p-4 flex flex-col justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                            <span className="text-lg text-secondary">Are you sure you want to logout?</span>
-                            <div className="w-full flex justify-around">
-                                <button className="bg-accent text-white px-4 rounded hover:bg-secondary transition" onClick={() => {
+            {/* Logout Confirm Modal */}
+            {isLogoutConfirmOpen && (
+                <div className="fixed z-[120px] w-full h-screen top-0 left-0 bg-black/30">
+                    <div className="w-[300px] h-[150px] bg-primary rounded-lg p-4 flex flex-col justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                        <span className="text-lg text-secondary">
+                            Are you sure you want to logout?
+                        </span>
+                        <div className="w-full flex justify-around">
+                            <button
+                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
+                                onClick={() => {
                                     localStorage.removeItem("token")
                                     window.location.href = "/login"
-                                }}>Yes</button>
-                                <button className="bg-accent text-white px-4 rounded hover:bg-secondary transition" onClick={() => {
-                                    setIsLogoutConfirmOpen(false)
-                                }}>No</button>
-                            </div>
+                                }}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
+                                onClick={() => setIsLogoutConfirmOpen(false)}
+                            >
+                                No
+                            </button>
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )}
+
             {/* Loading */}
             {loading && (
                 <div className="w-[30px] h-[30px] border-[3px] border-accent border-t-transparent rounded-full animate-spin"></div>
@@ -58,6 +98,7 @@ export default function UserData() {
             {user && (
                 <div
                     className="
+                        relative
                         flex items-center gap-2
                         bg-primary px-2 py-1
                         rounded-full
@@ -78,38 +119,62 @@ export default function UserData() {
                         {user.firstName}
                     </span>
 
-                    {/* Styled Dropdown */}
-                    <div className="relative">
-                        <select onChange={
-                            (e) => {
-                                if (e.target.value == "logout") {
-                                    setIsLogoutConfirmOpen(true)
-                                }
-                            }
-                        }
+                    {/* Menu Button */}
+                    <button
+                        ref={btnRef}
+                        onClick={() => setMenuOpen((v) => !v)}
+                        className="text-secondary text-sm px-1 outline-none"
+                    >
+                        ▼
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {menuOpen && (
+                        <div
+                            ref={menuRef}
                             className="
-                                appearance-none
-                                w-[22px]
-                                bg-transparent
-                                text-secondary
-                                cursor-pointer
-                                outline-none
-                                text-sm
-                                pl-1
-                                pr-4
+                                absolute right-0 top-[55px]
+                                w-[180px]
+                                bg-white
+                                rounded-lg
+                                shadow-lg
+                                z-50
+                                overflow-hidden
                             "
                         >
-                            <option></option>
-                            <option>Account Settings</option>
-                            <option>Orders</option>
-                            <option value="logout">Logout</option>
-                        </select>
+                            <button
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                onClick={() => {
+                                    setMenuOpen(false)
+                                    window.location.href = "/settings"
+                                }}
+                            >
+                                Account Settings
+                            </button>
 
-                        {/* Custom Arrow */}
-                        <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-secondary text-xs">
-                            ▼
-                        </span>
-                    </div>
+                            <button
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                onClick={() => {
+                                    setMenuOpen(false)
+                                    window.location.href = "/orders"
+                                }}
+                            >
+                                Orders
+                            </button>
+
+                            <div className="h-[1px] bg-secondary/10"></div>
+
+                            <button
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600"
+                                onClick={() => {
+                                    setMenuOpen(false)
+                                    setIsLogoutConfirmOpen(true)
+                                }}
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
 
