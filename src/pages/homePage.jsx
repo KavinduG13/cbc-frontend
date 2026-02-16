@@ -4,13 +4,14 @@ import { ProductPage } from "./productPage";
 import ProductOverview from "./productOverview";
 import CartPage from "./cart";
 import CheckoutPage from "./checkout";
+import ProductSlider from "../components/productSlider";
 
 export default function HomePage() {
-    return(
+    return (
         <div className="w-full h-full bg-primary">
-            <Header/>
+            <Header />
             <Routes path="/">
-                <Route path="/" element={<h1>Welcome to the Home Page</h1>} />
+                <Route path="/" element={<ProductSlider />} />
                 <Route path="/products" element={<ProductPage />} />
                 <Route path="/contact" element={<h1>Contact Us</h1>} />
                 <Route path="/about" element={<h1>About Us</h1>} />
