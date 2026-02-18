@@ -67,17 +67,14 @@ export default function OrdersPage(props) {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-screen-2xl mx-auto lg:flex lg:flex-col">
                 {!isLoading && orders.map((order) => (
                     <div
-                        key={order._id}
+                        key={order.orderID}
                         className="bg-white rounded-3xl shadow-lg p-6 transition-all duration-300 hover:shadow-2xl flex flex-col lg:w-[1350px]"
                     >
                         {/* Order Header */}
                         <div className="flex justify-between items-start mb-6">
                             <div className="flex-1 min-w-0 pr-3">
                                 <p className="font-semibold text-[var(--color-secondary)]">
-                                    Order ID
-                                </p>
-                                <p className="text-sm text-gray-500 truncate">
-                                    {order._id}
+                                    Order ID: {order.orderID}
                                 </p>
                                 <p className="text-sm text-gray-400 mt-1">
                                     {new Date(order.createdAt).toLocaleDateString()}
