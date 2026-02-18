@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { Loader } from "../components/loader";
 import axios from "axios";
 import AdminUsersPage from "./admin/adminUsersPage";
+import AdminDashboard from "./admin/adminDashboard";
 
 export default function AdminPage() {
 
@@ -73,7 +74,7 @@ export default function AdminPage() {
             <div className="w-[calc(100%-300px)] h-full border-[3px] border-accent rounded-[20px] overflow-hidden">
                 <div className="h-full w-full max-w-full max-h-full overflow-y-scroll">
                     {userLoaded?<Routes path="/">
-                        <Route path="/" element={<h1>Dashboard</h1>} />
+                        <Route path="/" element={<AdminDashboard />} />
                         <Route path="/orders" element={<AdminOrdersPage />} />
                         <Route path="/products" element={<AdminProductPage/>} />
                         <Route path="/add-product" element={<AddProductPage/>} />
