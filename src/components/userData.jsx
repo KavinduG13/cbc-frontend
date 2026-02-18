@@ -156,7 +156,7 @@ export default function UserData() {
                                 className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
                                 onClick={() => {
                                     setMenuOpen(false)
-                                    window.location.href = "/orders"
+                                    window.location.href = "/orders/my"
                                 }}
                             >
                                 Orders
