@@ -63,31 +63,47 @@ export default function UserData() {
         <div className="flex items-center justify-center mr-4">
             {/* Logout Confirm Modal */}
             {isLogoutConfirmOpen && (
-                <div className="fixed z-[120px] w-full h-screen top-0 left-0 bg-black/30">
-                    <div className="w-[300px] h-[150px] bg-primary rounded-lg p-4 flex flex-col justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                        <span className="text-lg text-secondary">
-                            Are you sure you want to logout?
-                        </span>
-                        <div className="w-full flex justify-around">
+                <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fadeIn">
+
+                    {/* Modal Card */}
+                    <div className="w-[340px] bg-primary rounded-2xl shadow-2xl p-6 flex flex-col gap-6 transform transition-all duration-300 scale-100 animate-scaleIn">
+
+                        {/* Title Section */}
+                        <div className="text-center">
+                            <h2 className="text-xl font-semibold text-secondary">
+                                Confirm Logout
+                            </h2>
+                            <p className="text-sm text-secondary/70 mt-2">
+                                Are you sure you want to logout from your account?
+                            </p>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="flex justify-between gap-4">
+
+                            {/* Cancel Button */}
                             <button
-                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
+                                className="w-full py-2 rounded-lg border border-secondary text-secondary font-medium hover:bg-secondary hover:text-primary transition duration-200"
+                                onClick={() => setIsLogoutConfirmOpen(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Logout Button */}
+                            <button
+                                className="w-full py-2 rounded-lg bg-accent text-white font-medium shadow-md hover:scale-105 hover:shadow-lg transition duration-200"
                                 onClick={() => {
                                     localStorage.removeItem("token")
                                     window.location.href = "/login"
                                 }}
                             >
-                                Yes
-                            </button>
-                            <button
-                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
-                                onClick={() => setIsLogoutConfirmOpen(false)}
-                            >
-                                No
+                                Logout
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
 
             {/* Loading */}
             {loading && (
