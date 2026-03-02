@@ -6,6 +6,7 @@ import axios from "axios"
 import { Loader } from "./loader"
 import ProductCard from "./productCard"
 import toast from "react-hot-toast"
+import Footer from "./footer"
 
 export default function ProductSlider() {
 
@@ -116,6 +117,8 @@ export default function ProductSlider() {
 
             {/* Extra spacing bottom */}
             <div className="h-16"></div>
+            
+            <Footer />
         </div>
     )
 }
