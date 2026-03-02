@@ -51,6 +51,8 @@ export default function CheckoutPage() {
             })
 
             toast.success("Order placed successfully")
+            setCart([])
+            navigate("/orders/success")
 
         } catch (error) {
             toast.error("Failed to place order")

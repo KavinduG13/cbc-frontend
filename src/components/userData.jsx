@@ -63,31 +63,47 @@ export default function UserData() {
         <div className="flex items-center justify-center mr-4">
             {/* Logout Confirm Modal */}
             {isLogoutConfirmOpen && (
-                <div className="fixed z-[120px] w-full h-screen top-0 left-0 bg-black/30">
-                    <div className="w-[300px] h-[150px] bg-primary rounded-lg p-4 flex flex-col justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                        <span className="text-lg text-secondary">
-                            Are you sure you want to logout?
-                        </span>
-                        <div className="w-full flex justify-around">
+                <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fadeIn">
+
+                    {/* Modal Card */}
+                    <div className="w-[340px] bg-primary rounded-2xl shadow-2xl p-6 flex flex-col gap-6 transform transition-all duration-300 scale-100 animate-scaleIn">
+
+                        {/* Title Section */}
+                        <div className="text-center">
+                            <h2 className="text-xl font-semibold text-secondary">
+                                Confirm Logout
+                            </h2>
+                            <p className="text-sm text-secondary/70 mt-2">
+                                Are you sure you want to logout from your account?
+                            </p>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="flex justify-between gap-4">
+
+                            {/* Cancel Button */}
                             <button
-                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
+                                className="w-full py-2 rounded-lg border border-secondary text-secondary font-medium hover:bg-secondary hover:text-primary transition duration-200"
+                                onClick={() => setIsLogoutConfirmOpen(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Logout Button */}
+                            <button
+                                className="w-full py-2 rounded-lg bg-accent text-white font-medium shadow-md hover:scale-105 hover:shadow-lg transition duration-200"
                                 onClick={() => {
                                     localStorage.removeItem("token")
                                     window.location.href = "/login"
                                 }}
                             >
-                                Yes
-                            </button>
-                            <button
-                                className="bg-accent text-white px-4 rounded hover:bg-secondary transition"
-                                onClick={() => setIsLogoutConfirmOpen(false)}
-                            >
-                                No
+                                Logout
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
 
             {/* Loading */}
             {loading && (
@@ -133,17 +149,25 @@ export default function UserData() {
                         <div
                             ref={menuRef}
                             className="
-                                absolute right-0 top-[55px]
-                                w-[180px]
-                                bg-white
-                                rounded-lg
-                                shadow-lg
-                                z-50
-                                overflow-hidden
-                            "
+            absolute right-0 top-[60px]
+            w-[220px]
+            bg-primary/95 backdrop-blur-md
+            rounded-2xl
+            shadow-2xl
+            border border-secondary/10
+            z-50
+            overflow-hidden
+            animate-dropdownIn
+        "
                         >
+                            {/* Account Settings */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-medium
+                text-secondary
+                hover:bg-secondary/5
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     window.location.href = "/settings"
@@ -152,20 +176,33 @@ export default function UserData() {
                                 Account Settings
                             </button>
 
+                            {/* Orders */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-medium
+                text-secondary
+                hover:bg-secondary/5
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     window.location.href = "/orders/my"
                                 }}
                             >
-                                Orders
+                                My Orders
                             </button>
 
-                            <div className="h-[1px] bg-secondary/10"></div>
+                            {/* Divider */}
+                            <div className="mx-4 h-[1px] bg-secondary/10"></div>
 
+                            {/* Logout */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-semibold
+                text-accent
+                hover:bg-accent/10
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     setIsLogoutConfirmOpen(true)
@@ -175,6 +212,7 @@ export default function UserData() {
                             </button>
                         </div>
                     )}
+
                 </div>
             )}
 

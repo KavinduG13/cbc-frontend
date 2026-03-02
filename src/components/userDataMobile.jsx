@@ -30,24 +30,48 @@ export default function UserDataMobile() {
 
     return (
         <div className="flex items-center justify-center mr-4">
-            {
-                isLogoutConfirmOpen && (
-                    <div className="fixed z-[120px] w-full h-screen top-0 left-0 bg-black/30">
-                        <div className="w-[300px] h-[150px] bg-primary rounded-lg p-4 flex flex-col justify-between items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                            <span className="text-lg">Are you sure you want to logout?</span>
-                            <div className="w-full flex justify-around">
-                                <button className="bg-accent text-white px-4 rounded hover:bg-secondary transition" onClick={() => {
+            {isLogoutConfirmOpen && (
+                <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-fadeIn">
+
+                    {/* Modal Card */}
+                    <div className="w-[340px] bg-primary rounded-2xl shadow-2xl p-6 flex flex-col gap-6 transform transition-all duration-300 scale-100 animate-scaleIn">
+
+                        {/* Title Section */}
+                        <div className="text-center">
+                            <h2 className="text-xl font-semibold text-secondary">
+                                Confirm Logout
+                            </h2>
+                            <p className="text-sm text-secondary/70 mt-2">
+                                Are you sure you want to logout from your account?
+                            </p>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="flex justify-between gap-4">
+
+                            {/* Cancel Button */}
+                            <button
+                                className="w-full py-2 rounded-lg border border-secondary text-secondary font-medium hover:bg-secondary hover:text-primary transition duration-200"
+                                onClick={() => setIsLogoutConfirmOpen(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Logout Button */}
+                            <button
+                                className="w-full py-2 rounded-lg bg-accent text-white font-medium shadow-md hover:scale-105 hover:shadow-lg transition duration-200"
+                                onClick={() => {
                                     localStorage.removeItem("token")
                                     window.location.href = "/login"
-                                }}>Yes</button>
-                                <button className="bg-accent text-white px-4 rounded hover:bg-secondary transition" onClick={() => {
-                                    setIsLogoutConfirmOpen(false)
-                                }}>No</button>
-                            </div>
+                                }}
+                            >
+                                Logout
+                            </button>
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )}
+
             {/* Loading */}
             {loading && (
                 <div className="w-[30px] h-[30px] border-[3px] border-accent border-t-transparent rounded-full animate-spin"></div>
@@ -78,37 +102,52 @@ export default function UserDataMobile() {
                     </span>
 
                     {/* Styled Dropdown */}
-                    <div className="relative">
-                        <select onChange={
-                            (e) => {
-                                if (e.target.value == "logout") {
+                    <div className="relative w-[160px]">
+                        <select
+                            onChange={(e) => {
+                                const value = e.target.value
+
+                                if (value === "settings") {
+                                    window.location.href = "/settings"
+                                }
+
+                                if (value === "orders") {
+                                    window.location.href = "/orders/my"
+                                }
+
+                                if (value === "logout") {
                                     setIsLogoutConfirmOpen(true)
                                 }
-                            }
-                        }
+                            }}
                             className="
-                                appearance-none
-                                w-[22px]
-                                bg-transparent
-                                text-secondary
-                                cursor-pointer
-                                outline-none
-                                text-sm
-                                pl-1
-                                pr-4
-                            "
+            appearance-none
+            w-full
+            bg-primary
+            text-secondary
+            border border-secondary/20
+            rounded-xl
+            px-4 py-2
+            text-sm font-medium
+            shadow-sm
+            focus:outline-none
+            focus:ring-2 focus:ring-accent/40
+            focus:border-accent
+            transition duration-200
+            cursor-pointer
+        "
                         >
-                            <option></option>
-                            <option>Account Settings</option>
-                            <option>Orders</option>
+                            <option value="">Menu</option>
+                            <option value="settings">Account Settings</option>
+                            <option value="orders">My Orders</option>
                             <option value="logout">Logout</option>
                         </select>
 
                         {/* Custom Arrow */}
-                        <span className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-secondary text-xs">
+                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-secondary/70 text-xs">
                             ▼
                         </span>
                     </div>
+
                 </div>
             )}
 
