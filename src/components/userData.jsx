@@ -149,17 +149,25 @@ export default function UserData() {
                         <div
                             ref={menuRef}
                             className="
-                                absolute right-0 top-[55px]
-                                w-[180px]
-                                bg-white
-                                rounded-lg
-                                shadow-lg
-                                z-50
-                                overflow-hidden
-                            "
+            absolute right-0 top-[60px]
+            w-[220px]
+            bg-primary/95 backdrop-blur-md
+            rounded-2xl
+            shadow-2xl
+            border border-secondary/10
+            z-50
+            overflow-hidden
+            animate-dropdownIn
+        "
                         >
+                            {/* Account Settings */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-medium
+                text-secondary
+                hover:bg-secondary/5
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     window.location.href = "/settings"
@@ -168,20 +176,33 @@ export default function UserData() {
                                 Account Settings
                             </button>
 
+                            {/* Orders */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary text-secondary"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-medium
+                text-secondary
+                hover:bg-secondary/5
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     window.location.href = "/orders/my"
                                 }}
                             >
-                                Orders
+                                My Orders
                             </button>
 
-                            <div className="h-[1px] bg-secondary/10"></div>
+                            {/* Divider */}
+                            <div className="mx-4 h-[1px] bg-secondary/10"></div>
 
+                            {/* Logout */}
                             <button
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-red-600"
+                                className="
+                w-full text-left px-5 py-3 text-sm font-semibold
+                text-accent
+                hover:bg-accent/10
+                transition duration-200
+            "
                                 onClick={() => {
                                     setMenuOpen(false)
                                     setIsLogoutConfirmOpen(true)
@@ -191,6 +212,7 @@ export default function UserData() {
                             </button>
                         </div>
                     )}
+
                 </div>
             )}
 
