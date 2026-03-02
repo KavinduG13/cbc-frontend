@@ -11,26 +11,26 @@ export default function UserSettings() {
 
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate()
+	const [user, setUser] = useState(null);
+	const navigate = useNavigate()
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            window.location.href = "/login";
-            return;
-        }
-        axios.get(import.meta.env.VITE_API_URL + "/api/users/me", {
-            headers: { Authorization: `Bearer ${token}` },
-        }).then((res) => {
-            setFirstName(res.data.firstName);
-            setLastName(res.data.lastName); 
-            setUser(res.data);           
-        }).catch(() => {
-            localStorage.removeItem("token");
-            window.location.href = "/login";
-        });
-    }, []);
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token) {
+			window.location.href = "/login";
+			return;
+		}
+		axios.get(import.meta.env.VITE_API_URL + "/api/users/me", {
+			headers: { Authorization: `Bearer ${token}` },
+		}).then((res) => {
+			setFirstName(res.data.firstName);
+			setLastName(res.data.lastName);
+			setUser(res.data);
+		}).catch(() => {
+			localStorage.removeItem("token");
+			window.location.href = "/login";
+		});
+	}, []);
 
 	// No-ops per your spec (wire your API calls here)
 	async function updateUserData() {
@@ -39,9 +39,9 @@ export default function UserSettings() {
 			lastName: lastName,
 			image: user.image
 		}
-		if(image != null){
+		if (image != null) {
 			const link = await mediaUpload(image);
-			image.profilePicture = link
+			data.image = link
 		}
 
 		await axios.put(import.meta.env.VITE_API_URL + "/api/users/me", data, {
@@ -93,11 +93,9 @@ export default function UserSettings() {
 				<div className="flex items-center gap-4 mb-6">
 					<div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-accent/60 shrink-0">
 						{imagePreview ? (
-							<img
-								src={imagePreview}
-								alt="Profile preview"
-								className="w-full h-full object-cover"
-							/>
+							<img src={imagePreview} alt="Profile preview" className="w-full h-full object-cover" />
+						) : user?.image ? (
+							<img src={user.image} alt="Profile" className="w-full h-full object-cover" />  // ✅ show existing image
 						) : (
 							<div className="w-full h-full grid place-items-center bg-secondary/10 text-secondary/60 text-sm">
 								No Photo
