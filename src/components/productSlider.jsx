@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import slide1 from "../assets/slide1.png"
-import slide2 from "../assets/slide2.png"
-import slide3 from "../assets/slide3.png"
+import slide1 from "../assets/slide1.jpg"
+import slide2 from "../assets/slide2.jpg"
+import slide3 from "../assets/slide3.jpg"
 import axios from "axios"
 import { Loader } from "./loader"
 import ProductCard from "./productCard"
@@ -47,7 +47,7 @@ export default function ProductSlider() {
         <div className="w-full">
 
             {/* ================= HERO SLIDER ================= */}
-            <div className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
+            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
 
                 {/* Images */}
                 {images.map((image, index) => (
