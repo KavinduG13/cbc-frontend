@@ -71,6 +71,25 @@ export default function ProductSlider() {
                     <p className="mt-4 text-lg md:text-xl text-gray-200 max-w-2xl">
                         Quality, trust and elegance in every purchase.
                     </p>
+                    <button onClick={() => {window.location.href = "/products"}} className="
+    mt-6
+    px-8 py-3
+    bg-accent
+    text-white
+    font-semibold
+    rounded-[10px]
+    shadow-lg
+    hover:bg-white
+    hover:text-accent
+    transition-all
+    duration-300
+    ease-in-out
+    transform
+    hover:scale-105
+    backdrop-blur-sm
+">
+                        Shop Now
+                    </button>
                 </div>
 
                 {/* Indicators */}
@@ -117,7 +136,7 @@ export default function ProductSlider() {
 
             {/* Extra spacing bottom */}
             <div className="h-16"></div>
-            
+
             <Footer />
         </div>
     )
