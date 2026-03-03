@@ -12,6 +12,7 @@ export default function CheckoutPage() {
     const [cart, setCart] = useState(location.state)
     const [address, setAddress] = useState("")
     const [name, setName] = useState("")
+    const [phone, setPhone] = useState("")
 
     function getTotal() {
         let total = 0
@@ -43,6 +44,7 @@ export default function CheckoutPage() {
             await axios.post(import.meta.env.VITE_API_URL + "/api/orders", {
                 address: address,
                 customerName: name==""?null:name,
+                phone: phone==""?null:phone,
                 items: items
             }, {
                 headers: {
@@ -128,6 +130,21 @@ export default function CheckoutPage() {
                             id="name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            className="w-[400px] h-[50px] border border-secondary rounded-md px-3 text-center"
+                        />
+                    </div>
+                    <div className="w-full h-full flex justify-between items-center p-4">
+                        <label 
+                            htmlFor="phone"
+                            className="text-sm text-secondary mr-2"    
+                        >
+                            Phone Number
+                        </label>
+                        <input 
+                            type="tel"
+                            id="phone"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             className="w-[400px] h-[50px] border border-secondary rounded-md px-3 text-center"
                         />
                     </div>
