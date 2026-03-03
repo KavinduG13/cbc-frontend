@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaTiktok, FaYoutube } from "react-icons/fa";
 export default function Footer() {
 
     const handleComingSoon = (platform) => {
-        alert(`Coming soon on ${platform} ✨`);
+        alert(`Coming soon on ${platform}😉`);
     };
 
     return (
@@ -71,7 +71,7 @@ export default function Footer() {
 
             {/* Bottom Section */}
             <div className="text-center text-sm text-white mt-6">
-                © {new Date().getFullYear()} Crystal Beauty. All rights reserved.
+                {new Date().getFullYear()} Crystal Beauty. All rights reserved.
             </div>
 
         </footer>
