@@ -45,7 +45,7 @@ export default function AdminOrdersPage() {
                             Orders
                         </h2>
                         <div className="hidden md:flex items-center gap-2 text-xs opacity-90">
-                            <span className="inline-flex h-2 w-2 rounded-full bg-accent" />
+                            <span className="inline-flex h-2 w-2 rounded-full bg-green-500" />
                             <span>Admin view</span>
                         </div>
                     </div>

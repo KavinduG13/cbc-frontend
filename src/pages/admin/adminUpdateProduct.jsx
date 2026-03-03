@@ -155,9 +155,12 @@ export default function UpdateProductPage() {
                             value={category}
                             onChange={(e) => { setCategory(e.target.value) }}>
                             <option value="" disabled>Select a category</option>
-                            <option value="cream">Cream</option>
-                            <option value="lotion">Lotion</option>
-                            <option value="serum">Serum</option>
+                            <option value="Cream">Cream</option>
+                            <option value="Lotion">Lotion</option>
+                            <option value="Serum">Serum</option>
+                            <option value="Powder">Powder</option>
+                            <option value="Skin-care">Skin Care</option>
+                            <option value="Eye-care">Eye Care</option>
                         </select>
                     </div>
 
