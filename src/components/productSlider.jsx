@@ -117,7 +117,7 @@ export default function ProductSlider() {
 
             {/* Extra spacing bottom */}
             <div className="h-16"></div>
-
+            
             <Footer />
         </div>
     )
